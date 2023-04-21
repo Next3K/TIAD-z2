@@ -1,5 +1,6 @@
 from Algorithm import Algorithm
 from Conductor import Conductor
+from Multipso import Multipso
 from ParticleSwarm import ParticleSwarm
 import functions
 from StopCriterion import StopCriterion
@@ -9,7 +10,7 @@ if __name__ == '__main__':
     print('Program is starting!')
 
     # choose function
-    function = functions.Sphere()
+    functions = [functions.Sphere(), functions.Ackley(), functions.Easom(), functions.Brown()]
 
     # stop criterion - iterations
     stop_criterion_iterations = StopCriterion("iterations")
@@ -21,22 +22,35 @@ if __name__ == '__main__':
     social_constant: float = 1.2
     cognitive_constant: float = 1.2
 
-    # setup algorithm
-    algorithm_pso: Algorithm = ParticleSwarm(stop_criterion_iterations,
-                                             swarm_size,
-                                             inertion,
-                                             social_constant,
-                                             cognitive_constant)
+    # setup algorithms
+    algorithm_epso: Algorithm = Multipso(stop_criterion_iterations,
+                                         sub_swarms=5,
+                                         swarm_size=80,
+                                         algorithm_type="elite")
 
-    count: int = 0
+    algorithm_opso: Algorithm = Multipso(stop_criterion_iterations,
+                                         sub_swarms=5,
+                                         swarm_size=80,
+                                         algorithm_type="osmosis")
 
-    conductor_pso = Conductor(30, algorithm_pso, function)
-    print("PSO algorithm:")
+    for function in functions:
+        conductor_epso = Conductor(30, algorithm_epso, function)
+        conductor_opso = Conductor(30, algorithm_opso, function)
+
+    print(f"EPSO algorithm results for function {function.__class__}:")
     print(
-        f"Best solution: {conductor_pso.best_solution},"
-        f" avg solution: {conductor_pso.average_solution},"
-        f" part success: {conductor_pso.part_successful},"
-        f" standard deviation: {conductor_pso.standard_deviation}")
+        f"Best solution: {conductor_epso.best_solution},"
+        f" avg solution: {conductor_epso.average_solution},"
+        f" part success: {conductor_epso.part_successful},"
+        f" standard deviation: {conductor_epso.standard_deviation}")
 
-    print_chart(conductor_pso.trace_list, "PSO")
+    print(f"OPSO algorithm results for function {function.__class__}:")
+    print(
+        f"Best solution: {conductor_opso.best_solution},"
+        f" avg solution: {conductor_opso.average_solution},"
+        f" part success: {conductor_opso.part_successful},"
+        f" standard deviation: {conductor_opso.standard_deviation}")
+
+    print_chart(conductor_opso.trace_list, "OPSO")
+    print_chart(conductor_epso.trace_list, "EPSO")
 

@@ -6,8 +6,7 @@ from functions import Equation
 
 
 class Conductor:
-    def __init__(self, number_of_runs: int, algorithm: Algorithm, function: Equation):
-        self.algorithm: Algorithm = algorithm
+    def __init__(self, number_of_runs: int, function: Equation):
         self.solutions: [float] = []
         self.best_solution = math.inf
         self.trace_list: [[float]] = None
