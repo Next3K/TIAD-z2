@@ -23,6 +23,7 @@ if __name__ == '__main__':
     # Multi PSO parameters
     number_of_swarms: int = 5
     swarm_size: int = 100
+    dimensions: [int] = [20, 50]
 
     # PSO parameters
     inertion: float = 0.8
@@ -42,22 +43,27 @@ if __name__ == '__main__':
 
     # conduct experiments for all functions
     for function in functions:
-        conductor_epso = Conductor(30, algorithm_epso, function)
-        conductor_opso = Conductor(30, algorithm_opso, function)
+        for dimension in dimensions:
 
-        print(f"EPSO algorithm results for function {function.__class__}:")
-        print(
-            f"Best solution: {conductor_epso.best_solution},"
-            f" avg solution: {conductor_epso.average_solution},"
-            f" part success: {conductor_epso.part_successful},"
-            f" standard deviation: {conductor_epso.standard_deviation}")
+            # set proper number od dimensions
+            function.dimensions = dimension
 
-        print(f"OPSO algorithm results for function {function.__class__}:")
-        print(
-            f"Best solution: {conductor_opso.best_solution},"
-            f" avg solution: {conductor_opso.average_solution},"
-            f" part success: {conductor_opso.part_successful},"
-            f" standard deviation: {conductor_opso.standard_deviation}")
+            conductor_epso = Conductor(30, algorithm_epso, function)
+            conductor_opso = Conductor(30, algorithm_opso, function)
 
-        print_chart(conductor_opso.trace_list, "OPSO")
-        print_chart(conductor_epso.trace_list, "EPSO")
+            print(f"EPSO algorithm results for function {function.__class__} (dimensions: {dimension}):")
+            print(
+                f"Best solution: {conductor_epso.best_solution},"
+                f" avg solution: {conductor_epso.average_solution},"
+                f" part success: {conductor_epso.part_successful},"
+                f" standard deviation: {conductor_epso.standard_deviation}")
+
+            print(f"OPSO algorithm results for function {function.__class__} (dimensions: {dimension}):")
+            print(
+                f"Best solution: {conductor_opso.best_solution},"
+                f" avg solution: {conductor_opso.average_solution},"
+                f" part success: {conductor_opso.part_successful},"
+                f" standard deviation: {conductor_opso.standard_deviation}")
+
+            print_chart(conductor_opso.trace_list, "OPSO")
+            print_chart(conductor_epso.trace_list, "EPSO")

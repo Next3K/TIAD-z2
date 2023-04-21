@@ -23,7 +23,7 @@ class Sphere(Equation):
 
         total = 0
         for i in range(self.dimensions):
-            total += (x[i]**2)
+            total += (x[i] ** 2)
 
         return total
 
@@ -38,7 +38,7 @@ class FunctionTwo(Equation):
 
         total = 0
         for i in range(self.dimensions):
-            total += (x[i] - i)**2
+            total += (x[i] - i) ** 2
         return total
 
     def __init__(self, minimum: float = -100, maximum: float = 100, dimensions: int = 20, accuracy: float = 0.0001):
@@ -110,7 +110,7 @@ class Easom(Equation):
     def calculate(self, x: [float]) -> float:
         if len(x) != self.dimensions:
             raise ValueError(f"Expected {self.dimensions} elements, got: {len(x)}")
-        return -math.cos(x[0]) * math.cos(x[1]) * math.exp(-(x[0] - math.pi)**2 - (x[1] - math.pi)**2)
+        return -math.cos(x[0]) * math.cos(x[1]) * math.exp(-(x[0] - math.pi) ** 2 - (x[1] - math.pi) ** 2)
 
     def __init__(self, minimum: float = -10, maximum: float = 10, dimensions: int = 2, accuracy: float = 0.000001):
         super().__init__(minimum=minimum, maximum=maximum, dimensions=dimensions, accuracy=accuracy)
