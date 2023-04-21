@@ -1,6 +1,8 @@
 import math
 from abc import ABC, abstractmethod
 
+from matplotlib import pyplot as plt
+
 
 class Equation(ABC):
     def __init__(self, minimum: float, maximum: float, dimensions: int, accuracy: float):
@@ -205,3 +207,14 @@ def should_stop(iteration: int, diff: float, stop_criterion: str, max_iterations
             print(f"Total iterations: {iteration}")
             return True
     return False
+
+
+def print_chart(data: [[float]], name: str):
+    x = [i for i in range(len(data))]
+    y = data
+    plt.xlabel("Iterations")
+    plt.ylabel("Function value")
+    plt.title(f"Graph for {name}")
+    for i in range(len(y[0])):
+        plt.plot(x, [pt[i] for pt in y])
+    plt.show()
