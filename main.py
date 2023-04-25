@@ -30,35 +30,36 @@ if __name__ == '__main__':
     social_constant: float = 1.2
     cognitive_constant: float = 1.2
 
-    # setup algorithms
-    algorithm_epso: Algorithm = Multipso(stop_criterion_iterations,
-                                         sub_swarms=number_of_swarms,
-                                         swarm_size=swarm_size,
-                                         algorithm_type="elite")
-
-    algorithm_opso: Algorithm = Multipso(stop_criterion_iterations,
-                                         sub_swarms=number_of_swarms,
-                                         swarm_size=swarm_size,
-                                         algorithm_type="osmosis")
-
     # conduct experiments for all functions
     for function in functions:
-        for dimension in dimensions:
+        for number_of_dimensions in dimensions:
 
             # set proper number od dimensions
-            function.dimensions = dimension
+            function.dimensions = number_of_dimensions
 
-            conductor_epso = Conductor(30, algorithm_epso, function)
-            conductor_opso = Conductor(30, algorithm_opso, function)
+            conductor_opso = Conductor(8,
+                                       algorithm_type="osmosis",
+                                       function=function,
+                                       stop_criterion=stop_criterion_iterations,
+                                       number_of_swarms=number_of_swarms,
+                                       swarm_size=swarm_size)
 
-            print(f"EPSO algorithm results for function {function.__class__} (dimensions: {dimension}):")
+            conductor_epso = Conductor(8,
+                                       algorithm_type="elite",
+                                       function=function,
+                                       stop_criterion=stop_criterion_iterations,
+                                       number_of_swarms=number_of_swarms,
+                                       swarm_size=swarm_size)
+
+
+            print(f"EPSO algorithm results for function {function.__class__} (dimensions: {number_of_dimensions}):")
             print(
                 f"Best solution: {conductor_epso.best_solution},"
                 f" avg solution: {conductor_epso.average_solution},"
                 f" part success: {conductor_epso.part_successful},"
                 f" standard deviation: {conductor_epso.standard_deviation}")
 
-            print(f"OPSO algorithm results for function {function.__class__} (dimensions: {dimension}):")
+            print(f"OPSO algorithm results for function {function.__class__} (dimensions: {number_of_dimensions}):")
             print(
                 f"Best solution: {conductor_opso.best_solution},"
                 f" avg solution: {conductor_opso.average_solution},"

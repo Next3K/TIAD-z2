@@ -1,7 +1,7 @@
 import bisect
 from abc import abstractmethod
 from math import floor
-from random import random
+import random
 from typing import List
 
 import numpy as np
@@ -44,19 +44,19 @@ class OsmosisMigration(MigrationMethod):
             number_of_migrating: int = floor(migration_rate * n)
 
             # get particles to migrate
-            bigger_to_migrate = bigger[:number_of_migrating]
-            smaller_to_migrate = smaller[n - number_of_migrating:]
+            bigger_to_migrate = bigger[n - number_of_migrating:]
+            smaller_to_migrate = smaller[:number_of_migrating]
 
-            bigger = bigger[number_of_migrating:]
-            smaller = smaller[:n - number_of_migrating]
+            bigger = bigger[:n - number_of_migrating]
+            smaller = smaller[number_of_migrating:]
 
             # put weak particles into better swarm
             for big in bigger_to_migrate:
-                bisect.insort(smaller, big)
+                bisect.insort(a=smaller, x=big, key=lambda x: x.current_score)
 
             # put strong particles into weaker swarm
             for small in smaller_to_migrate:
-                bisect.insort(bigger, small)
+                bisect.insort(a=bigger, x=small, key=lambda x: x.current_score)
 
 
 class EliteMigration(MigrationMethod):
@@ -69,13 +69,13 @@ class EliteMigration(MigrationMethod):
         for particle_swarm in round_table.swarms:
             elite_particles.append(particle_swarm.particles[0])
 
-        dim = len(elite_particles[0].position)
+        number_of_dimensions = len(elite_particles[0].position)
         for i in range(len(elite_particles)):
             mean_position = []
-            for j in range(dim):
+            for j in range(number_of_dimensions):
                 mean_position.append(np.mean([p.position[j] for p in elite_particles if p != elite_particles[i]]))
 
             new_coords = []
-            for dimension in range(dim):
-                new_coords.append(mean_position[dim] * (1 + random.gauss(0.0, 1.0)))
+            for dimension in range(number_of_dimensions):
+                new_coords.append(mean_position[dimension] * (1 + random.gauss(0.0, 1.0)))
             elite_particles[i].update_positions_with_coords(new_coords=new_coords)

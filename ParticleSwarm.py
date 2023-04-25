@@ -12,12 +12,14 @@ class ParticleSwarm:
 
     def __init__(self,
                  stop_criterion: StopCriterion,
+                 equation: Equation,
                  swarm_size: int = 80,
                  inertion: float = 0.2,
                  social_constant: float = 0.45,
-                 cognitive_constant: float = 0.35):
+                 cognitive_constant: float = 0.35,
+                 ):
 
-        super().__init__(stop_criterion)
+        self.stop_criterion = stop_criterion
         self.swarm_size = swarm_size
         self.inertion = inertion
         self.social_constant = social_constant
@@ -25,15 +27,10 @@ class ParticleSwarm:
 
         # setup for current experiment
         self.global_solution = None
-        self.particles: List[Particle] = []
         self.current_iteration = 0
-        self.equation = None
-
-    def set_function_to_optimize(self, equation: Equation):
-        # self.global_solution = math.inf
         self.equation = equation
-        self.particles: [Particle] = [Particle(equation.min, equation.max, equation.dimensions)
-                                      for _ in range(self.swarm_size)]
+        self.particles: List[Particle] = [
+            Particle(equation.min, equation.max, equation.dimensions) for _ in range(self.swarm_size)]
 
     # return sorted particles and their scores
     def run_iteration(self):
@@ -43,7 +40,7 @@ class ParticleSwarm:
             calculated_score = self.equation.calculate(particle.position)
             particle.update_score(calculated_score)
 
-        # sort particles by their score
+        # sort particles by their score, lowest score at the beginning
         self.particles.sort(key=lambda x: x.current_score)
 
         current_best_position = self.particles[0].position
@@ -70,12 +67,14 @@ class ParticleSwarmElite(ParticleSwarm):
 
     def __init__(self,
                  stop_criterion: StopCriterion,
+                 equation: Equation,
                  swarm_size: int = 80,
                  inertion: float = 0.2,
                  social_constant: float = 0.45,
                  cognitive_constant: float = 0.35):
 
         super().__init__(stop_criterion=stop_criterion,
+                         equation=equation,
                          swarm_size=swarm_size,
                          inertion=inertion,
                          social_constant=social_constant,

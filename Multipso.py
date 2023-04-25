@@ -10,17 +10,17 @@ from MigrationMethod import MigrationMethod, OsmosisMigration, EliteMigration
 
 class Multipso(Algorithm):
 
-    def find_solution(self, function: Equation) -> (float, [[float]]):
+    def find_solution(self) -> (float, [[float]]):
         iteration: int = 0
         global_solution: float = math.inf
         trace: [[float]] = []
         while not self.stop_criterion.should_stop(iteration=iteration, solution=global_solution):
+            # perform iteration
+            self.swarms.next_iteration()
+
             # add scores to the trace
             trace.append(self.swarms.get_all_scores())
             global_solution = min(global_solution, min(self.swarms.get_all_scores()))
-
-            # perform iteration
-            self.swarms.next_iteration()
 
             # particle migration
             self.migration_method.migrate(self.swarms)
@@ -32,6 +32,7 @@ class Multipso(Algorithm):
 
     def __init__(self,
                  stop_criterion: StopCriterion,
+                 equation: Equation,
                  sub_swarms: int,
                  swarm_size: int,
                  algorithm_type: str,
@@ -41,14 +42,13 @@ class Multipso(Algorithm):
         if algorithm_type not in {"elite", "osmosis"}:
             raise ValueError(f"Type of algorithm should be one of: \"elite\", \"osmosis\" but is f{algorithm_type}")
 
-        self.algorithm_type: str = algorithm_type
-
         self.migration_method: MigrationMethod = OsmosisMigration() \
             if algorithm_type == "osmosis" else EliteMigration()
 
         if algorithm_type == "osmosis":
             self.swarms: SwarmRoundTable = SwarmRoundTable(
                 [ParticleSwarm(stop_criterion=stop_criterion,
+                               equation=equation,
                                swarm_size=swarm_size,
                                inertion=0.2,
                                social_constant=0.45,
@@ -56,6 +56,7 @@ class Multipso(Algorithm):
         elif algorithm_type == "elite":
             self.swarms: SwarmRoundTable = SwarmRoundTable(
                 [ParticleSwarmElite(stop_criterion=stop_criterion,
+                                    equation=equation,
                                     swarm_size=swarm_size,
                                     inertion=0.2,
                                     social_constant=0.45,
