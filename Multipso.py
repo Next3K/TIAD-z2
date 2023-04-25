@@ -1,7 +1,7 @@
 import math
 
 from Algorithm import Algorithm
-from ParticleSwarm import ParticleSwarm
+from ParticleSwarm import ParticleSwarm, ParticleSwarmElite
 from StopCriterion import StopCriterion
 from SwarmRoundTable import SwarmRoundTable
 from functions import Equation
@@ -46,9 +46,19 @@ class Multipso(Algorithm):
         self.migration_method: MigrationMethod = OsmosisMigration() \
             if algorithm_type == "osmosis" else EliteMigration()
 
-        self.swarms: SwarmRoundTable = SwarmRoundTable(
-            [ParticleSwarm(stop_criterion=stop_criterion,
-                           swarm_size=swarm_size,
-                           inertion=0.2,
-                           social_constant=0.45,
-                           cognitive_constant=0.35) for _ in range(sub_swarms)])
+        if algorithm_type == "osmosis":
+            self.swarms: SwarmRoundTable = SwarmRoundTable(
+                [ParticleSwarm(stop_criterion=stop_criterion,
+                               swarm_size=swarm_size,
+                               inertion=0.2,
+                               social_constant=0.45,
+                               cognitive_constant=0.35) for _ in range(sub_swarms)])
+        elif algorithm_type == "elite":
+            self.swarms: SwarmRoundTable = SwarmRoundTable(
+                [ParticleSwarmElite(stop_criterion=stop_criterion,
+                                    swarm_size=swarm_size,
+                                    inertion=0.2,
+                                    social_constant=0.45,
+                                    cognitive_constant=0.35) for _ in range(sub_swarms)])
+        else:
+            raise ValueError("Bad choice")
