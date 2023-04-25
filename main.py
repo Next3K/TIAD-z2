@@ -21,7 +21,7 @@ if __name__ == '__main__':
     # Multi PSO parameters
     number_of_swarms: int = 4
     swarm_size: int = 50
-    dimensions: [int] = [50, 100]
+    dimensions: [int] = [15, 30]
 
     # PSO parameters
     inertion: float = 0.8
@@ -29,6 +29,8 @@ if __name__ == '__main__':
     cognitive_constant: float = 1.2
 
     # conduct experiments for all functions
+
+    # check for different swarm sizes
     for num_of_swarms in [4, 5, 8]:
         print(f"\n\n\n CURRENT NUMBER OF SWARMS IS {num_of_swarms} \n\n\n")
         for function in functions:
