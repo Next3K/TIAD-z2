@@ -34,7 +34,6 @@ class Conductor:
                                  algorithm_type=self.algorithm_type,
                                  equation=self.function)
             solution, trace_list = algorithm.find_solution()
-            print(f"conducted experiment for algo: {algorithm_type}")
             if solution is not None and solution is not -math.inf and solution is not math.inf:
                 self.solutions.append(solution)
                 if solution < self.best_solution:

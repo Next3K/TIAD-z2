@@ -1,7 +1,4 @@
-from Algorithm import Algorithm
 from Conductor import Conductor
-from Multipso import Multipso
-from ParticleSwarm import ParticleSwarm
 import functions
 from StopCriterion import StopCriterion
 from functions import print_chart
@@ -14,7 +11,8 @@ if __name__ == '__main__':
                  functions.Ackley(),
                  functions.Easom(),
                  functions.Brown(),
-                 functions.Griewank()]
+                 functions.Griewank(),
+                 functions.Corana()]
 
     # stop criterion - iterations
     stop_criterion_iterations = StopCriterion("iterations")
@@ -22,7 +20,7 @@ if __name__ == '__main__':
 
     # Multi PSO parameters
     number_of_swarms: int = 5
-    swarm_size: int = 100
+    swarm_size: int = 50
     dimensions: [int] = [20, 50]
 
     # PSO parameters
@@ -33,24 +31,22 @@ if __name__ == '__main__':
     # conduct experiments for all functions
     for function in functions:
         for number_of_dimensions in dimensions:
-
             # set proper number od dimensions
             function.dimensions = number_of_dimensions
 
-            conductor_opso = Conductor(8,
+            conductor_opso = Conductor(30,
                                        algorithm_type="osmosis",
                                        function=function,
                                        stop_criterion=stop_criterion_iterations,
                                        number_of_swarms=number_of_swarms,
                                        swarm_size=swarm_size)
 
-            conductor_epso = Conductor(8,
+            conductor_epso = Conductor(30,
                                        algorithm_type="elite",
                                        function=function,
                                        stop_criterion=stop_criterion_iterations,
                                        number_of_swarms=number_of_swarms,
                                        swarm_size=swarm_size)
-
 
             print(f"EPSO algorithm results for function {function.__class__} (dimensions: {number_of_dimensions}):")
             print(
