@@ -21,7 +21,7 @@ if __name__ == '__main__':
     # Multi PSO parameters
     number_of_swarms: int = 5
     swarm_size: int = 50
-    dimensions: [int] = [20, 50]
+    dimensions: [int] = [50, 100]
 
     # PSO parameters
     inertion: float = 0.8
