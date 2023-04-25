@@ -11,15 +11,15 @@ if __name__ == '__main__':
                  functions.Ackley(),
                  functions.Easom(),
                  functions.Brown(),
-                 functions.Griewank(),
-                 functions.Corana()]
+                 functions.FunctionTwo(),
+                 functions.Rosenbrock()]
 
     # stop criterion - iterations
     stop_criterion_iterations = StopCriterion("iterations")
     stop_criterion_delta = StopCriterion("delta")
 
     # Multi PSO parameters
-    number_of_swarms: int = 5
+    number_of_swarms: int = 4
     swarm_size: int = 50
     dimensions: [int] = [50, 100]
 
