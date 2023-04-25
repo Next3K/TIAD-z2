@@ -1,5 +1,6 @@
 import math
 import random
+from typing import List
 
 
 class Particle:
@@ -22,6 +23,20 @@ class Particle:
     def update_positions(self):
         for dim in range(len(self.velocity)):
             new_position_value = self.position[dim] + self.velocity[dim]
+
+            # ensure that search boundaries are respected
+            if new_position_value > self.maximum:
+                self.position[dim] = self.maximum
+            elif new_position_value < self.minimum:
+                self.position[dim] = self.minimum
+            else:
+                self.position[dim] = new_position_value
+
+    def update_positions_with_coords(self, new_coords: List[float]):
+        assert len(new_coords) == len(self.position)
+
+        for dim in range(len(self.position)):
+            new_position_value = new_coords[dim]
 
             # ensure that search boundaries are respected
             if new_position_value > self.maximum:

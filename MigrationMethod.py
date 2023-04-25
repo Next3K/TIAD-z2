@@ -74,6 +74,8 @@ class EliteMigration(MigrationMethod):
             mean_position = []
             for j in range(dim):
                 mean_position.append(np.mean([p.position[j] for p in elite_particles if p != elite_particles[i]]))
-            current_pos = elite_particles[i].position
+
+            new_coords = []
             for dimension in range(dim):
-                current_pos[dim] = mean_position[dim] * (1 + random.gauss(0.0, 1.0))
+                new_coords.append(mean_position[dim] * (1 + random.gauss(0.0, 1.0)))
+            elite_particles[i].update_positions_with_coords(new_coords=new_coords)
